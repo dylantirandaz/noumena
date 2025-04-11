@@ -1,33 +1,61 @@
 #lang racket/base
 
-(module noumena-reader racket
-  (require racket/sytanx)
-  (provide read)
+(require racket/syntax)
 
-  (define (read in port source)
-    (define stx (read-syntax source port))
-    stx))
 
-(module noumena-parser racket
-  (require syntax/parse racket/sytanx)
-  (provide parse)
+;;Dual Declaration
+(define-syntax (declare stx)
+  (syntax-parse stx
+    [(_identifier ":" _type:id "=" expr:expr)
+     #'(define id expr)]
+    [(_ id:identifier ":" _type:id)
+     #'(define id 'noumenon)]))
 
-  (define (parse stx)
-    stx))
+;;Function-like Declarations with Type Annotation
+(define-syntax (intuition stx)
+  (syntax-parse stx
+    [(_ id:identifier "(" (p:id ":" _t:id_) ... ")" "->" _ret:expr "{" body:expr ... "}")
+        #'(define (id p ...) body ...)]))
 
-(module noumena racket
-  (require "noumena-reader.rkt"
-           "noumena-parser.rkt"
-           racket/syntax)
-  (provide run-noumena)
+(define-syntax (category stx)
+  (syntax-parse stx
+    [(_ id:identifier "(" (p:id ":" _t:id) ... ")" "->" _ret:expr "{" body:expr ... "}")
+     #'(define (id p ...) body ...)]))
+
+(define-syntax (transcendental stx)
+  (syntax-parse stx
+    [(_ id:identifier "(" (p:id ":" _t:id) ... ")" "->" _ret:expr "{" body:expr ... "}")
+     #'(define (id p ...) body ...)]))
+
+(define-syntax (analytic stx)
+  (syntax-parse stx
+    [(_ id:identifier "(" (p:id ":" _t:id) ... ")" "{" body:expr ... "}" )
+     #'(define (id p ...) body ...)]))
+
+(define-syntax (synthetic stx)
+  (syntax-parse stx
+    [(_ id:identifier "(" (p:id ":" _t:id) ... ")" "{" body:expr ... "}" )
+     #'(define (id p ...) body ...)]))
+
+(define-syntax (imperative stx)
+  (syntax-parse stx
+    [(_ id:identifier "(" (p:id ":" _t:id) ... ")" "{" body:expr ... "}" )
+     #'(define (id p ...) body ...)]))
+
+;;Knowledge Qualifiers
+
+(define-syntax (a_priori stx)
+  (syntax-parse stx
+    [(_ constant id:identifier "=" expr:expr)
+     #'(define id expr)]
+    [(_ constant id:identifier)
+     #'(define id 'a-priori-constant)]))
+
+(define-syntax (a_posteriori stx)
+  (syntax-parse stx
+    [(_ var id:identifier "=" expr:expr)
+        #'(define id expr)]
+    [(_ var id:identifier)
+     #'(define id 'a-posteriori-var)]))
+
   
-  (define (run-noumena code)
-    (define stx(read $f (open-input-string code) "string"))
-    (define parsed (parse stx))
-    (displayln "=== Running Noumena Code ===")
-    (displayln parsed)
-    parsed)
- )
-
-(provide (all-defined-out))
-           
