@@ -58,4 +58,22 @@
     [(_ var id:identifier)
      #'(define id 'a-posteriori-var)]))
 
-  
+
+;;all definitions 
+(provide
+  declare
+  intuition
+  category
+  transcendental
+  analytic
+  synthetic
+  imperative
+  a_priori
+  a_posteriori
+  MORAL_LAW
+  freedom_as_appears
+  freedom_in_itself
+  perceive_choice
+  understand_freedom
+  postulate_freedom
+  act_freely)  
